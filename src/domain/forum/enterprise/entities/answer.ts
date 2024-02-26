@@ -1,8 +1,8 @@
-import { Entity } from "@/core/entities/entity"
-import { UniqueEntityId } from "@/core/entities/unique-entity-id"
-import { Optional } from "@/core/types/optional"
+import { Entity } from '@/core/entities/entity'
+import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
 
-interface AnswerProps {
+export interface AnswerProps {
   authorId: UniqueEntityId
   questionId: UniqueEntityId
   content: string
@@ -11,32 +11,35 @@ interface AnswerProps {
 }
 
 export class Answer extends Entity<AnswerProps> {
-
-  get authorId(){
+  get authorId() {
     return this.props.authorId
   }
-  get questionId(){
+
+  get questionId() {
     return this.props.questionId
   }
-  get content(){
+
+  get content() {
     return this.props.content
   }
-  get createdAt(){
+
+  get createdAt() {
     return this.props.createdAt
   }
-  get updatedAt(){
+
+  get updatedAt() {
     return this.props.updatedAt
   }
 
-  get excerpt(){
+  get excerpt() {
     return this.content.substring(0, 120).trimEnd().concat('...')
   }
 
-  private touch(){
+  private touch() {
     this.props.updatedAt = new Date()
   }
 
-  set content(content: string){
+  set content(content: string) {
     // if(content.length > 2400){
     //   throw new Error('Invalid content length.')
     // }
@@ -44,12 +47,17 @@ export class Answer extends Entity<AnswerProps> {
     this.touch()
   }
 
-  static create(props: Optional<AnswerProps, 'createdAt'>, id?: UniqueEntityId){
-    const answer = new Answer({
-      ...props,
-      createdAt: new Date()
-    }, id)
+  static create(
+    props: Optional<AnswerProps, 'createdAt'>,
+    id?: UniqueEntityId,
+  ) {
+    const answer = new Answer(
+      {
+        ...props,
+        createdAt: new Date(),
+      },
+      id,
+    )
     return answer
   }
-
 }

@@ -1,8 +1,12 @@
 export class Slug {
   public value: string
 
-  constructor(value: string) {
+  private constructor(value: string) {
     this.value = value
+  }
+
+  static create(slug: string) {
+    return new Slug(slug)
   }
 
   /**
@@ -12,9 +16,9 @@ export class Slug {
    * @param text {string}
    * @returns
    */
-  static createFromText(text: string){
+  static createFromText(text: string) {
     const slug = text
-      .normalize("NFKD")
+      .normalize('NFKD')
       .toLowerCase()
       .trim()
       .replace(/\s+/g, '-')
@@ -22,7 +26,6 @@ export class Slug {
       .replace(/_/g, '-')
       .replace(/--+/g, '-')
       .replace(/-$/g, '')
-
 
     return new Slug(slug)
   }
