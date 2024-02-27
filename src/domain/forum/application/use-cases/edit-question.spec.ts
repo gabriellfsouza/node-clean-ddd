@@ -2,7 +2,7 @@ import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questio
 
 import { makeQuestion } from 'test/factories/make-question'
 import { EditQuestionUseCase } from './edit-question'
-import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 // system under test
@@ -17,11 +17,11 @@ describe('Edit Question', () => {
   it('should be able to edit a question', async () => {
     const idContent = 'question-1'
     const questionContent = {
-      authorId: new UniqueEntityId('author-1'),
+      authorId: new UniqueEntityID('author-1'),
     }
     const newQuestion = makeQuestion(
       questionContent,
-      new UniqueEntityId(idContent),
+      new UniqueEntityID(idContent),
     )
     inMemoryQuestionsRepository.create(newQuestion)
 
@@ -41,11 +41,11 @@ describe('Edit Question', () => {
   it('should not be able to edit a question from another user', async () => {
     const idContent = 'question-1'
     const questionContent = {
-      authorId: new UniqueEntityId('author-1'),
+      authorId: new UniqueEntityID('author-1'),
     }
     const newQuestion = makeQuestion(
       questionContent,
-      new UniqueEntityId(idContent),
+      new UniqueEntityID(idContent),
     )
     inMemoryQuestionsRepository.create(newQuestion)
 

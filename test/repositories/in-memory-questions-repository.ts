@@ -18,6 +18,12 @@ export class InMemoryQuestionsRepository implements QuestionsRepository {
     return question
   }
 
+  async findManyRecent({ page }: { page: number }) {
+    return this.items
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice((page - 1) * 20, page * 20)
+  }
+
   async create(question: Question) {
     this.items.push(question)
   }

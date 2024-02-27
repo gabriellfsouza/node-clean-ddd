@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 
-export class UniqueEntityId {
+export class UniqueEntityID {
   toString() {
     return this.value
   }
@@ -14,6 +14,6 @@ export class UniqueEntityId {
   //   return this.value
   // }
   // static create (id?: string){
-  //   return new UniqueEntityId(id ?? crypto.randomUUID())
+  //   return new UniqueEntityID(id ?? crypto.randomUUID())
   // }
 }

@@ -2,7 +2,7 @@ import { InMemoryAnswersRepository } from 'test/repositories/in-memory-answers-r
 
 import { makeAnswer } from 'test/factories/make-answer'
 import { EditAnswerUseCase } from './edit-answer'
-import { UniqueEntityId } from '@/core/entities/unique-entity-id'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 let inMemoryAnswersRepository: InMemoryAnswersRepository
 // system under test
@@ -17,9 +17,9 @@ describe('Edit Answer', () => {
   it('should be able to edit a answer', async () => {
     const idContent = 'answer-1'
     const answerContent = {
-      authorId: new UniqueEntityId('author-1'),
+      authorId: new UniqueEntityID('author-1'),
     }
-    const newAnswer = makeAnswer(answerContent, new UniqueEntityId(idContent))
+    const newAnswer = makeAnswer(answerContent, new UniqueEntityID(idContent))
     inMemoryAnswersRepository.create(newAnswer)
 
     await sut.execute({
@@ -36,9 +36,9 @@ describe('Edit Answer', () => {
   it('should not be able to edit a answer from another user', async () => {
     const idContent = 'answer-1'
     const answerContent = {
-      authorId: new UniqueEntityId('author-1'),
+      authorId: new UniqueEntityID('author-1'),
     }
-    const newAnswer = makeAnswer(answerContent, new UniqueEntityId(idContent))
+    const newAnswer = makeAnswer(answerContent, new UniqueEntityID(idContent))
     inMemoryAnswersRepository.create(newAnswer)
 
     await expect(() =>
