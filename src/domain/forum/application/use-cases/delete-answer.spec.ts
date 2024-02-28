@@ -4,14 +4,21 @@ import { makeAnswer } from 'test/factories/make-answer'
 import { DeleteAnswerUseCase } from './delete-answer'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { NotAllowedError } from './errors/not-allowed-error'
+import { InMemoryAnswerAttachmentsRepository } from 'test/repositories/in-memory-answer-attachments-repository'
+import { makeAnswerAttachment } from 'test/factories/make-answer-attachment'
 
+let inMemoryAnswerAttachmentsRepository: InMemoryAnswerAttachmentsRepository
 let inMemoryAnswersRepository: InMemoryAnswersRepository
 // system under test
 let sut: DeleteAnswerUseCase
 
 describe('Delete Answer', () => {
   beforeEach(async () => {
-    inMemoryAnswersRepository = new InMemoryAnswersRepository()
+    inMemoryAnswerAttachmentsRepository =
+      new InMemoryAnswerAttachmentsRepository()
+    inMemoryAnswersRepository = new InMemoryAnswersRepository(
+      inMemoryAnswerAttachmentsRepository,
+    )
     sut = new DeleteAnswerUseCase(inMemoryAnswersRepository)
   })
 
@@ -21,7 +28,18 @@ describe('Delete Answer', () => {
       authorId: new UniqueEntityID('author-1'),
     }
     const newAnswer = makeAnswer(answerContent, new UniqueEntityID(idContent))
-    inMemoryAnswersRepository.create(newAnswer)
+    await inMemoryAnswersRepository.create(newAnswer)
+
+    inMemoryAnswerAttachmentsRepository.items.push(
+      makeAnswerAttachment({
+        answerId: newAnswer.id,
+        attachmentId: new UniqueEntityID('1'),
+      }),
+      makeAnswerAttachment({
+        answerId: newAnswer.id,
+        attachmentId: new UniqueEntityID('2'),
+      }),
+    )
 
     await sut.execute({
       authorId: answerContent.authorId?.toString(),
@@ -29,6 +47,7 @@ describe('Delete Answer', () => {
     })
 
     expect(inMemoryAnswersRepository.items).toHaveLength(0)
+    expect(inMemoryAnswerAttachmentsRepository.items).toHaveLength(0)
   })
 
   it('should not be able to delete a answer from another user', async () => {
@@ -37,7 +56,7 @@ describe('Delete Answer', () => {
       authorId: new UniqueEntityID('author-1'),
     }
     const newAnswer = makeAnswer(answerContent, new UniqueEntityID(idContent))
-    inMemoryAnswersRepository.create(newAnswer)
+    await inMemoryAnswersRepository.create(newAnswer)
 
     const result = await sut.execute({
       authorId: 'author-2',
