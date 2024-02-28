@@ -1,5 +1,6 @@
 import { InMemoryAnswersRepository } from 'test/repositories/in-memory-answers-repository'
 import { AnswerQuestionUseCase } from './answer-question'
+import { Answer } from '../../enterprise/entities/answer'
 
 let inMemoryAnswersRepository: InMemoryAnswersRepository
 // system under test
@@ -12,11 +13,15 @@ describe('Create Answer', () => {
   })
 
   it('should be able to create an answer', async () => {
-    const { answer } = await sut.execute({
+    const result = await sut.execute({
       questionId: '1',
       instructorId: '1',
       content: "Answer's content",
     })
+
+    const { answer } = result.value as { answer: Answer }
+
+    expect(result.isRight()).toBe(true)
 
     expect(answer.id).toBeTruthy()
     expect(inMemoryAnswersRepository.items[0].content).toEqual(

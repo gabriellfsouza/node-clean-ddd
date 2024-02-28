@@ -1,6 +1,7 @@
 import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository'
 import { makeQuestion } from 'test/factories/make-question'
 import { FetchRecentQuestionsUseCase } from './fetch-recent-questions'
+import { Question } from '../../enterprise/entities/question'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 // system under test
@@ -23,9 +24,11 @@ describe('Fetch Recent Questions', () => {
       makeQuestion({ createdAt: new Date(2024, 0, 23) }),
     )
 
-    const { questions } = await sut.execute({
+    const result = await sut.execute({
       page: 1,
     })
+
+    const { questions } = result.value as { questions: Question[] }
 
     expect(questions).toEqual([
       expect.objectContaining({ createdAt: new Date(2024, 0, 23) }),
@@ -39,9 +42,11 @@ describe('Fetch Recent Questions', () => {
       await inMemoryQuestionsRepository.create(makeQuestion())
     }
 
-    const { questions } = await sut.execute({
+    const result = await sut.execute({
       page: 2,
     })
+
+    const { questions } = result.value as { questions: Question[] }
 
     expect(questions).toHaveLength(2)
   })

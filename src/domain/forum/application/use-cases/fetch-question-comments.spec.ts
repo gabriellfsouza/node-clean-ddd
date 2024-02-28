@@ -2,6 +2,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { InMemoryQuestionCommentsRepository } from 'test/repositories/in-memory-question-comments-repository'
 import { FetchQuestionCommentsUseCase } from './fetch-question-comments'
 import { makeQuestionComment } from 'test/factories/make-question-comment'
+import { QuestionComment } from '../../enterprise/entities/question-comment'
 
 let inMemoryQuestionCommentsRepository: InMemoryQuestionCommentsRepository
 // system under test
@@ -25,10 +26,14 @@ describe('Fetch Question Comments', () => {
       makeQuestionComment({ questionId: new UniqueEntityID('question-1') }),
     )
 
-    const { questionComments } = await sut.execute({
+    const result = await sut.execute({
       questionId: 'question-1',
       page: 1,
     })
+
+    const { questionComments } = result.value as {
+      questionComments: QuestionComment[]
+    }
 
     expect(questionComments).toHaveLength(3)
   })
@@ -42,10 +47,14 @@ describe('Fetch Question Comments', () => {
       )
     }
 
-    const { questionComments } = await sut.execute({
+    const result = await sut.execute({
       questionId: 'question-1',
       page: 2,
     })
+
+    const { questionComments } = result.value as {
+      questionComments: QuestionComment[]
+    }
 
     expect(questionComments).toHaveLength(2)
   })

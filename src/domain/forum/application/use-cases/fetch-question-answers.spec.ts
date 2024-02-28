@@ -2,6 +2,7 @@ import { InMemoryAnswersRepository } from 'test/repositories/in-memory-answers-r
 import { makeAnswer } from 'test/factories/make-answer'
 import { FetchQuestionAnswersUseCase } from './fetch-question-answers'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Answer } from '../../enterprise/entities/answer'
 
 let inMemoryAnswersRepository: InMemoryAnswersRepository
 // system under test
@@ -24,10 +25,12 @@ describe('Fetch Question Answers', () => {
       makeAnswer({ questionId: new UniqueEntityID('question-1') }),
     )
 
-    const { answers } = await sut.execute({
+    const result = await sut.execute({
       questionId: 'question-1',
       page: 1,
     })
+
+    const { answers } = result.value as { answers: Answer[] }
 
     expect(answers).toHaveLength(3)
   })
@@ -41,10 +44,12 @@ describe('Fetch Question Answers', () => {
       )
     }
 
-    const { answers } = await sut.execute({
+    const result = await sut.execute({
       questionId: 'question-1',
       page: 2,
     })
+
+    const { answers } = result.value as { answers: Answer[] }
 
     expect(answers).toHaveLength(2)
   })
