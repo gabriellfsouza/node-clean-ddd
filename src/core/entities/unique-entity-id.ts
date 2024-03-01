@@ -10,10 +10,8 @@ export class UniqueEntityID {
   }
 
   constructor(private value: string = randomUUID()) {}
-  // get id(){
-  //   return this.value
-  // }
-  // static create (id?: string){
-  //   return new UniqueEntityID(id ?? crypto.randomUUID())
-  // }
+
+  equals(id: UniqueEntityID) {
+    return id.toValue() === this.value
+  }
 }

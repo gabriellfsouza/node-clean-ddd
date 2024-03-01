@@ -17,7 +17,8 @@
         "varsIgnorePattern": "^_",
         "ignoreRestSiblings": true
       }
-    ]
+    ],
+    "no-new": "off"
   },
   "env": {
     "vitest-globals/env": true
